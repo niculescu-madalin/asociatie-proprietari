@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using asociatie_proprietari.Data;
 
@@ -11,9 +12,11 @@ using asociatie_proprietari.Data;
 namespace asociatie_proprietari.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240514054525_AddedUserClass")]
+    partial class AddedUserClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,45 +170,15 @@ namespace asociatie_proprietari.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ApartamentId"));
 
-                    b.Property<int?>("NumarApartament")
-                        .HasColumnType("int");
-
                     b.Property<int?>("NumarCamere")
                         .HasColumnType("int");
 
                     b.Property<int?>("NumarPersoane")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Scara")
-                        .HasColumnType("int");
-
                     b.HasKey("ApartamentId");
 
                     b.ToTable("Apartament");
-                });
-
-            modelBuilder.Entity("asociatie_proprietari.Models.ApartamentPropietar", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
-
-                    b.Property<int>("ApartamentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PropietarId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("ApartamentId");
-
-                    b.HasIndex("PropietarId");
-
-                    b.ToTable("ApartamentPropietar");
                 });
 
             modelBuilder.Entity("asociatie_proprietari.Models.Propietar", b =>
@@ -258,6 +231,9 @@ namespace asociatie_proprietari.Data.Migrations
 
                     b.Property<string>("Prenume")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PropietarId")
+                        .HasColumnType("int");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -331,35 +307,6 @@ namespace asociatie_proprietari.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("asociatie_proprietari.Models.ApartamentPropietar", b =>
-                {
-                    b.HasOne("asociatie_proprietari.Models.Apartament", "Apartament")
-                        .WithMany("ApartamentPropietars")
-                        .HasForeignKey("ApartamentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("asociatie_proprietari.Models.Propietar", "Propietar")
-                        .WithMany("ApartamentPropietars")
-                        .HasForeignKey("PropietarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Apartament");
-
-                    b.Navigation("Propietar");
-                });
-
-            modelBuilder.Entity("asociatie_proprietari.Models.Apartament", b =>
-                {
-                    b.Navigation("ApartamentPropietars");
-                });
-
-            modelBuilder.Entity("asociatie_proprietari.Models.Propietar", b =>
-                {
-                    b.Navigation("ApartamentPropietars");
                 });
 #pragma warning restore 612, 618
         }

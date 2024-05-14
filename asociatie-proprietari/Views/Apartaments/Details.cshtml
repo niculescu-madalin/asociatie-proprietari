@@ -1,0 +1,42 @@
+﻿@model asociatie_proprietari.Models.Apartament
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Apartament</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumarApartament)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumarApartament)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Scara)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Scara)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumarCamere)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumarCamere)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumarPersoane)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumarPersoane)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.ApartamentId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
