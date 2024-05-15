@@ -7,51 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using asociatie_proprietari.Data;
 using asociatie_proprietari.Models;
-using Azure.Identity;
 
 namespace asociatie_proprietari.Controllers
 {
-    public class ApartamentsController : Controller
+    public class ContractsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ApartamentsController(ApplicationDbContext context)
+        public ContractsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Apartaments
+        // GET: Contracts
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Apartament.ToListAsync());
+            return View(await _context.Contract.ToListAsync());
         }
 
-        public IActionResult ByUser()
-        {
-            string username = User.Identity.Name;
-            if (string.IsNullOrEmpty(username))
-            {
-                return BadRequest("Username cannot be empty.");
-            }
-
-            var propietar = _context.Propietar
-                .Include(p => p.ApartamentPropietars)
-                .ThenInclude(ap => ap.Apartament)
-                .FirstOrDefault(p => p.UserName == username);
-
-            if (propietar == null)
-            {
-                return NotFound($"Propietar with username '{username}' not found.");
-            }
-
-            var apartments = propietar.ApartamentPropietars
-                .Select(ap => ap.Apartament)
-                .ToList();
-
-            return View(apartments);
-        }
-
-        // GET: Apartaments/Details/5
+        // GET: Contracts/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -59,39 +33,39 @@ namespace asociatie_proprietari.Controllers
                 return NotFound();
             }
 
-            var apartament = await _context.Apartament
-                .FirstOrDefaultAsync(m => m.ApartamentId == id);
-            if (apartament == null)
+            var contract = await _context.Contract
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (contract == null)
             {
                 return NotFound();
             }
 
-            return View(apartament);
+            return View(contract);
         }
 
-        // GET: Apartaments/Create
+        // GET: Contracts/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Apartaments/Create
+        // POST: Contracts/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ApartamentId,NumarApartament,Scara,NumarCamere,NumarPersoane")] Apartament apartament)
+        public async Task<IActionResult> Create([Bind("Id,Furnizor,DataIncepere,DataFinalizare")] Contract contract)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(apartament);
+                _context.Add(contract);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(apartament);
+            return View(contract);
         }
 
-        // GET: Apartaments/Edit/5
+        // GET: Contracts/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -99,22 +73,22 @@ namespace asociatie_proprietari.Controllers
                 return NotFound();
             }
 
-            var apartament = await _context.Apartament.FindAsync(id);
-            if (apartament == null)
+            var contract = await _context.Contract.FindAsync(id);
+            if (contract == null)
             {
                 return NotFound();
             }
-            return View(apartament);
+            return View(contract);
         }
 
-        // POST: Apartaments/Edit/5
+        // POST: Contracts/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ApartamentId,NumarApartament,Scara,NumarCamere,NumarPersoane")] Apartament apartament)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Furnizor,DataIncepere,DataFinalizare")] Contract contract)
         {
-            if (id != apartament.ApartamentId)
+            if (id != contract.Id)
             {
                 return NotFound();
             }
@@ -123,12 +97,12 @@ namespace asociatie_proprietari.Controllers
             {
                 try
                 {
-                    _context.Update(apartament);
+                    _context.Update(contract);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ApartamentExists(apartament.ApartamentId))
+                    if (!ContractExists(contract.Id))
                     {
                         return NotFound();
                     }
@@ -139,10 +113,10 @@ namespace asociatie_proprietari.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(apartament);
+            return View(contract);
         }
 
-        // GET: Apartaments/Delete/5
+        // GET: Contracts/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -150,34 +124,34 @@ namespace asociatie_proprietari.Controllers
                 return NotFound();
             }
 
-            var apartament = await _context.Apartament
-                .FirstOrDefaultAsync(m => m.ApartamentId == id);
-            if (apartament == null)
+            var contract = await _context.Contract
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (contract == null)
             {
                 return NotFound();
             }
 
-            return View(apartament);
+            return View(contract);
         }
 
-        // POST: Apartaments/Delete/5
+        // POST: Contracts/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var apartament = await _context.Apartament.FindAsync(id);
-            if (apartament != null)
+            var contract = await _context.Contract.FindAsync(id);
+            if (contract != null)
             {
-                _context.Apartament.Remove(apartament);
+                _context.Contract.Remove(contract);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ApartamentExists(int id)
+        private bool ContractExists(int id)
         {
-            return _context.Apartament.Any(e => e.ApartamentId == id);
+            return _context.Contract.Any(e => e.Id == id);
         }
     }
 }

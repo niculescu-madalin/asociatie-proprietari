@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using asociatie_proprietari.Data;
 
@@ -11,9 +12,11 @@ using asociatie_proprietari.Data;
 namespace asociatie_proprietari.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240514171519_AddedConsumApaTable")]
+    partial class AddedConsumApaTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -159,40 +162,6 @@ namespace asociatie_proprietari.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("asociatie_proprietari.Models.Angajat", b =>
-                {
-                    b.Property<int>("AngajatId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AngajatId"));
-
-                    b.Property<int>("Bonus")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Functie")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Nume")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Prenume")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Salariu")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Telefon")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AngajatId");
-
-                    b.ToTable("Angajat");
-                });
-
             modelBuilder.Entity("asociatie_proprietari.Models.Apartament", b =>
                 {
                     b.Property<int>("ApartamentId")
@@ -250,9 +219,6 @@ namespace asociatie_proprietari.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("An")
-                        .HasColumnType("int");
-
                     b.Property<int>("ApartamentId")
                         .HasColumnType("int");
 
@@ -262,110 +228,11 @@ namespace asociatie_proprietari.Data.Migrations
                     b.Property<int?>("ConsumApaRece")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Luna")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("ApartamentId");
 
                     b.ToTable("ConsumApa");
-                });
-
-            modelBuilder.Entity("asociatie_proprietari.Models.Contract", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime?>("DataFinalizare")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DataIncepere")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Furnizor")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Contract");
-                });
-
-            modelBuilder.Entity("asociatie_proprietari.Models.Factura", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ApartamentId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ContractId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DataInregistrare")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DataScadenta")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("SumaDePlata")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("SumaPlatita")
-                        .HasColumnType("int");
-
-                    b.Property<string>("status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ApartamentId");
-
-                    b.HasIndex("ContractId");
-
-                    b.ToTable("Factura");
-                });
-
-            modelBuilder.Entity("asociatie_proprietari.Models.Plata", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("CardCVV")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("Data")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("FacturaId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NumarCard")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NumeCard")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("SumaPlatita")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FacturaId");
-
-                    b.ToTable("Plata");
                 });
 
             modelBuilder.Entity("asociatie_proprietari.Models.Propietar", b =>
@@ -523,40 +390,9 @@ namespace asociatie_proprietari.Data.Migrations
                     b.Navigation("Apartament");
                 });
 
-            modelBuilder.Entity("asociatie_proprietari.Models.Factura", b =>
-                {
-                    b.HasOne("asociatie_proprietari.Models.Apartament", "Apartament")
-                        .WithMany("Facturas")
-                        .HasForeignKey("ApartamentId");
-
-                    b.HasOne("asociatie_proprietari.Models.Contract", "Contract")
-                        .WithMany("Factura")
-                        .HasForeignKey("ContractId");
-
-                    b.Navigation("Apartament");
-
-                    b.Navigation("Contract");
-                });
-
-            modelBuilder.Entity("asociatie_proprietari.Models.Plata", b =>
-                {
-                    b.HasOne("asociatie_proprietari.Models.Factura", "Factura")
-                        .WithMany()
-                        .HasForeignKey("FacturaId");
-
-                    b.Navigation("Factura");
-                });
-
             modelBuilder.Entity("asociatie_proprietari.Models.Apartament", b =>
                 {
                     b.Navigation("ApartamentPropietars");
-
-                    b.Navigation("Facturas");
-                });
-
-            modelBuilder.Entity("asociatie_proprietari.Models.Contract", b =>
-                {
-                    b.Navigation("Factura");
                 });
 
             modelBuilder.Entity("asociatie_proprietari.Models.Propietar", b =>

@@ -9,5 +9,6 @@
         public int? NumarPersoane { get; set; }
 
         public ICollection<ApartamentPropietar> ApartamentPropietars { get; set; }
+        public ICollection<Factura> Facturas { get; set; } 
     }
 }

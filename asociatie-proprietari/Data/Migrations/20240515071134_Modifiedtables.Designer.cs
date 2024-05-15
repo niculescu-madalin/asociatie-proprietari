@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using asociatie_proprietari.Data;
 
@@ -11,9 +12,11 @@ using asociatie_proprietari.Data;
 namespace asociatie_proprietari.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240515071134_Modifiedtables")]
+    partial class Modifiedtables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -526,7 +529,7 @@ namespace asociatie_proprietari.Data.Migrations
             modelBuilder.Entity("asociatie_proprietari.Models.Factura", b =>
                 {
                     b.HasOne("asociatie_proprietari.Models.Apartament", "Apartament")
-                        .WithMany("Facturas")
+                        .WithMany()
                         .HasForeignKey("ApartamentId");
 
                     b.HasOne("asociatie_proprietari.Models.Contract", "Contract")
@@ -550,8 +553,6 @@ namespace asociatie_proprietari.Data.Migrations
             modelBuilder.Entity("asociatie_proprietari.Models.Apartament", b =>
                 {
                     b.Navigation("ApartamentPropietars");
-
-                    b.Navigation("Facturas");
                 });
 
             modelBuilder.Entity("asociatie_proprietari.Models.Contract", b =>

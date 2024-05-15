@@ -13,5 +13,10 @@ namespace asociatie_proprietari.Data
         public DbSet<asociatie_proprietari.Models.Apartament> Apartament { get; set; } = default!;
         public DbSet<asociatie_proprietari.Models.Propietar> Propietar { get; set; } = default!;
         public DbSet<asociatie_proprietari.Models.ApartamentPropietar> ApartamentPropietar { get; set; } = default!;
+        public DbSet<asociatie_proprietari.Models.ConsumApa> ConsumApa { get; set;} = default!;
+        public DbSet<asociatie_proprietari.Models.Angajat> Angajat { get; set; } = default!;
+        public DbSet<asociatie_proprietari.Models.Contract> Contract { get; set; } = default!;
+        public DbSet<asociatie_proprietari.Models.Factura> Factura { get; set; } = default!;
+        public DbSet<asociatie_proprietari.Models.Plata> Plata { get; set; } = default!;
     }
 }

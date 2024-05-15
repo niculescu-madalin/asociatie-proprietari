@@ -7,51 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using asociatie_proprietari.Data;
 using asociatie_proprietari.Models;
-using Azure.Identity;
 
 namespace asociatie_proprietari.Controllers
 {
-    public class ApartamentsController : Controller
+    public class PlatasController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public ApartamentsController(ApplicationDbContext context)
+        public PlatasController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Apartaments
+        // GET: Platas
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Apartament.ToListAsync());
+            var applicationDbContext = _context.Plata.Include(p => p.Factura);
+            return View(await applicationDbContext.ToListAsync());
         }
 
-        public IActionResult ByUser()
-        {
-            string username = User.Identity.Name;
-            if (string.IsNullOrEmpty(username))
-            {
-                return BadRequest("Username cannot be empty.");
-            }
-
-            var propietar = _context.Propietar
-                .Include(p => p.ApartamentPropietars)
-                .ThenInclude(ap => ap.Apartament)
-                .FirstOrDefault(p => p.UserName == username);
-
-            if (propietar == null)
-            {
-                return NotFound($"Propietar with username '{username}' not found.");
-            }
-
-            var apartments = propietar.ApartamentPropietars
-                .Select(ap => ap.Apartament)
-                .ToList();
-
-            return View(apartments);
-        }
-
-        // GET: Apartaments/Details/5
+        // GET: Platas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -59,39 +34,42 @@ namespace asociatie_proprietari.Controllers
                 return NotFound();
             }
 
-            var apartament = await _context.Apartament
-                .FirstOrDefaultAsync(m => m.ApartamentId == id);
-            if (apartament == null)
+            var plata = await _context.Plata
+                .Include(p => p.Factura)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (plata == null)
             {
                 return NotFound();
             }
 
-            return View(apartament);
+            return View(plata);
         }
 
-        // GET: Apartaments/Create
+        // GET: Platas/Create
         public IActionResult Create()
         {
+            ViewData["FacturaId"] = new SelectList(_context.Factura, "Id", "Id");
             return View();
         }
 
-        // POST: Apartaments/Create
+        // POST: Platas/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ApartamentId,NumarApartament,Scara,NumarCamere,NumarPersoane")] Apartament apartament)
+        public async Task<IActionResult> Create([Bind("Id,NumarCard,NumeCard,CardCVV,SumaPlatita,Status,Data,FacturaId")] Plata plata)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(apartament);
+                _context.Add(plata);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(apartament);
+            ViewData["FacturaId"] = new SelectList(_context.Factura, "Id", "Id", plata.FacturaId);
+            return View(plata);
         }
 
-        // GET: Apartaments/Edit/5
+        // GET: Platas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -99,22 +77,23 @@ namespace asociatie_proprietari.Controllers
                 return NotFound();
             }
 
-            var apartament = await _context.Apartament.FindAsync(id);
-            if (apartament == null)
+            var plata = await _context.Plata.FindAsync(id);
+            if (plata == null)
             {
                 return NotFound();
             }
-            return View(apartament);
+            ViewData["FacturaId"] = new SelectList(_context.Factura, "Id", "Id", plata.FacturaId);
+            return View(plata);
         }
 
-        // POST: Apartaments/Edit/5
+        // POST: Platas/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ApartamentId,NumarApartament,Scara,NumarCamere,NumarPersoane")] Apartament apartament)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NumarCard,NumeCard,CardCVV,SumaPlatita,Status,Data,FacturaId")] Plata plata)
         {
-            if (id != apartament.ApartamentId)
+            if (id != plata.Id)
             {
                 return NotFound();
             }
@@ -123,12 +102,12 @@ namespace asociatie_proprietari.Controllers
             {
                 try
                 {
-                    _context.Update(apartament);
+                    _context.Update(plata);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ApartamentExists(apartament.ApartamentId))
+                    if (!PlataExists(plata.Id))
                     {
                         return NotFound();
                     }
@@ -139,10 +118,11 @@ namespace asociatie_proprietari.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(apartament);
+            ViewData["FacturaId"] = new SelectList(_context.Factura, "Id", "Id", plata.FacturaId);
+            return View(plata);
         }
 
-        // GET: Apartaments/Delete/5
+        // GET: Platas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -150,34 +130,35 @@ namespace asociatie_proprietari.Controllers
                 return NotFound();
             }
 
-            var apartament = await _context.Apartament
-                .FirstOrDefaultAsync(m => m.ApartamentId == id);
-            if (apartament == null)
+            var plata = await _context.Plata
+                .Include(p => p.Factura)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (plata == null)
             {
                 return NotFound();
             }
 
-            return View(apartament);
+            return View(plata);
         }
 
-        // POST: Apartaments/Delete/5
+        // POST: Platas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var apartament = await _context.Apartament.FindAsync(id);
-            if (apartament != null)
+            var plata = await _context.Plata.FindAsync(id);
+            if (plata != null)
             {
-                _context.Apartament.Remove(apartament);
+                _context.Plata.Remove(plata);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ApartamentExists(int id)
+        private bool PlataExists(int id)
         {
-            return _context.Apartament.Any(e => e.ApartamentId == id);
+            return _context.Plata.Any(e => e.Id == id);
         }
     }
 }
