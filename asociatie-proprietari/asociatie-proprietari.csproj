@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>aspnet-asociatie_proprietari-77b1461d-5843-4f87-a5ca-f9aea40f1788</UserSecretsId>
     <RootNamespace>asociatie_proprietari</RootNamespace>
+    <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
 
   <ItemGroup>

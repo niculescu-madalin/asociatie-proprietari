@@ -24,7 +24,6 @@ namespace UnitTests
 
             _context = new ApplicationDbContext(options);
 
-            // Seed the in-memory database with test data
             _context.Angajat.AddRange(new List<Angajat>
             {
                 new Angajat { AngajatId = 1, Nume = "John", Prenume = "Doe", Telefon = "1234567890", Email = "john.doe@example.com", Functie = "Manager", Salariu = 5000, Bonus = 500 },
@@ -100,11 +99,5 @@ namespace UnitTests
             Assert.That(result, Is.InstanceOf<ViewResult>(), "Expected ViewResult");
         }
 
-        // More tests can be added for Create (POST), Edit, and Delete actions
-
-        private bool AngajatExists(int id)
-        {
-            return _context.Angajat.Any(e => e.AngajatId == id);
-        }
     }
 }
