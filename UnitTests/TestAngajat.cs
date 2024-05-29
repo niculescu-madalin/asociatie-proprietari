@@ -52,7 +52,7 @@ namespace UnitTests
             Assert.That(viewResult, Is.Not.Null, "Expected ViewResult");
             var model = viewResult.Model as List<Angajat>;
             Assert.That(model, Is.Not.Null, "Expected List<Angajat> as model");
-            Assert.That(model.Count, Is.EqualTo(2), "Expected two Angajats in the model");
+            Assert.That(model.Count, Is.EqualTo(2), "Expected two Employees in the model");
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace UnitTests
             var viewResult = result as ViewResult;
             Assert.That(viewResult, Is.Not.Null, "Expected ViewResult");
             var model = viewResult.Model as Angajat;
-            Assert.That(model, Is.Not.Null, "Expected Angajat as model");
+            Assert.That(model, Is.Not.Null, "Expected Employee as model");
             Assert.That(model.AngajatId, Is.EqualTo(1), "Expected AngajatId to be 1");
         }
 
@@ -122,7 +122,7 @@ namespace UnitTests
             Assert.That(result, Is.InstanceOf<RedirectToActionResult>(), "Expected RedirectToActionResult");
             var redirectResult = result as RedirectToActionResult;
             Assert.That(redirectResult.ActionName, Is.EqualTo("Index"), "Expected redirection to Index");
-            Assert.That(_context.Angajat.Count(), Is.EqualTo(3), "Expected the Angajat count to be 3");
+            Assert.That(_context.Angajat.Count(), Is.EqualTo(3), "Expected the Employees count to be 3");
         }
 
         [Test]
@@ -235,7 +235,7 @@ namespace UnitTests
             Assert.That(result, Is.InstanceOf<RedirectToActionResult>(), "Expected RedirectToActionResult");
             var redirectResult = result as RedirectToActionResult;
             Assert.That(redirectResult.ActionName, Is.EqualTo("Index"), "Expected redirection to Index");
-            Assert.That(_context.Angajat.Count(), Is.EqualTo(1), "Expected the Angajat count to be 1");
+            Assert.That(_context.Angajat.Count(), Is.EqualTo(1), "Expected the Employees count to be 1");
         }
 
     }
